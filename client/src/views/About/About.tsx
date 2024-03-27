@@ -22,7 +22,7 @@ const About = () => {
               instead relying on a web-based terminal that connects to the
               server as soon as it loads. Player creation is also managed
               independently of the server, and the actively selected player is
-              then loaded into the server.
+              then loaded into the server. Every 
             </p>
             <br />
             <p>

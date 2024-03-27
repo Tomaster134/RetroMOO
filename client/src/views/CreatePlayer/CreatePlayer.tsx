@@ -36,6 +36,7 @@ const CreatePlayer = () => {
     const data = await response.json();
     console.log(data);
     if (data.status === "ok") {
+      localStorage.setItem("active_account", data.player_id);
       enqueueSnackbar(
         `Player ${player.player_name} has been created and set as active account!`,
         { variant: "success" }

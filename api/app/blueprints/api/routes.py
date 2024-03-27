@@ -115,6 +115,7 @@ def create_api():
         return jsonify({
             'status': 'ok',
             'message': 'player account created',
+            'player_id': new_player.id
         })
     except exc.IntegrityError:
         return jsonify({
