@@ -1,0 +1,70 @@
+.account-container {
+  height: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.account-box {
+  margin: 25px;
+  border: 1px white solid;
+  height: 900px;
+  width: 1200px;
+  background-image: url(../../assets/imgs/two-knights.jpg);
+  background-position: center;
+  background-size: cover;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px inset;
+}
+
+.account-welcome {
+  color: white;
+  font-size: 50px;
+  font-family: "Trade Winds", system-ui;
+  margin-top: 20px;
+}
+
+.account-box-interior {
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.92) 60%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.account-box-title {
+  color: white;
+  margin-top: 25px;
+  font-size: 24px;
+  font-family: "Trade Winds", system-ui;
+}
+
+.account-divider {
+  height: 50px;
+  width: 500px;
+  margin: 10px;
+  background-image: url(../../assets/imgs/divider.png);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.account-blurb {
+  color: white;
+  width: 70%;
+  font-size: 20px;
+  text-indent: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.account-card {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

@@ -1,0 +1,76 @@
+body {
+  background-image: linear-gradient(
+      180deg,
+      rgb(0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.1) 80%
+    ),
+    url(../../assets/imgs/forest.jpeg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+html {
+  height: 100%;
+}
+
+.home-container {
+  height: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-box {
+  margin: 25px;
+  border: 1px white solid;
+  height: 900px;
+  width: 1200px;
+  background-image: url(../../assets/imgs/village.jpg);
+  background-position: center;
+  background-size: cover;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px inset;
+}
+
+.home-welcome {
+  color: white;
+  font-size: 50px;
+  font-family: "Trade Winds", system-ui;
+  margin-top: 20px;
+}
+
+.home-box-interior {
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.9) 30%,
+    rgba(0, 0, 0, 0.2) 90%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-box-title {
+  color: white;
+  margin-top: 25px;
+  font-size: 24px;
+  font-family: "Trade Winds", system-ui;
+}
+
+.home-divider {
+  height: 50px;
+  width: 500px;
+  margin: 10px;
+  background-image: url(../../assets/imgs/divider.png);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.home-blurb {
+  color: white;
+  width: 70%;
+  font-size: 20px;
+  text-indent: 20px;
+}
