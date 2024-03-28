@@ -31,13 +31,13 @@ class World():
 
     def world_who(self, player):
         player_list = []
-        for player in self.players.values():
-            socketio.emit('event', {'message': player.name}, to=player.session_id)
-            player_list.append(player.name)
+        for player_who in self.players.values():
+            socketio.emit('event', {'message': f'first {player_who.name}'}, to=player.session_id)
+            player_list.append(player_who.name)
         output = ''
-        for player in player_list:
-            socketio.emit('event', {'message': player.name}, to=player.session_id)
-            output += f'{player}, '
+        for player_who in player_list:
+            socketio.emit('event', {'message': f'second {player_who}'}, to=player.session_id)
+            output += f'{player_who}, '
         output += f'are currently online.'
         socketio.emit('event', {'message': output}, to=player.session_id)
 
@@ -145,6 +145,7 @@ class Player(Character):
         self.session_id = '' #Session ID so messages can be broadcast to players without other members of a room or server seeing the message. Session ID is unique to every connection, so part of the connection process must be to assign the new value to the player's session_id
         self.inventory = []
         self.player_map = ''
+        self.in_combat = False
 
     def connection(self):
         events.world.rooms[self.location].contents['Players'].update({self.id: self})
@@ -270,6 +271,9 @@ class Player(Character):
 
     def whisper(self, whisper_player, data):
         socketio.emit('event', {'message': f'The wind breathes against your ear, and you can faintly hear "{data}". You get a feeling it\'s from {self.name}.'}, to=whisper_player.session_id)
+
+    def combat(self, victim):
+        pass
 
     def move(self, direction, room):
         if direction not in room.exits:

@@ -24,6 +24,9 @@ def client(data):
 
     elif content['command'] == 'say':
         say(content['player'], content['data'])
+    
+    elif content['command'] in ['attack', 'kill', 'hurt', 'k', 'fight']:
+        combat(content['player'], content['data'])
 
     elif content['command'][0] == '"':
         new_data = content['command'][1:]
@@ -80,6 +83,21 @@ def whisper(player, data):
             player.whisper(whisper_player=world_player, data=whisper_data)
             return
     socketio.emit('event', {'message': 'That player either doesn\'t exist, or isn\'t currently online.'}, to=player.session_id)
+
+def combat(player, data):
+    victim = None
+    for player in events.world.players.values():
+        if player.name == data:
+            victim = player
+            player.combat(victim=victim)
+            return
+    for npc in events.world.npcs.values():
+        if npc.name == data:
+            victim = npc
+            player.combat(victim=victim)
+            return
+    
+
 
 def move(player, direction, room):
     player.move(direction=direction, room=room)
