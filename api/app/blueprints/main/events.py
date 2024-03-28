@@ -63,6 +63,7 @@ def connect(auth):
     player.location_map()
     player.inventory_update()
     socketio.emit('event', {'message': f'{username} has connected to the server'})
+    socketio.emit('event', {'message': f'{username} appears with a puff of smoke.'}, to=location)
     player.connection()
 
 #Event that handles disconnection. Unsure if I should be saving player information on disconnect or periodically. Likely both. Need to remove the player and client from the list of active connections. If all players are disconnected, world state should be saved and server activity spun down.
@@ -79,6 +80,7 @@ def disconnect():
     leave_room(room)
     player.disconnection()
     socketio.emit('event', {'message': f'{player.name} has left the server'})
+    socketio.emit('event', {'message': f'{player.name} disappears, leaving slight wisps of smoke behind.'}, to=room)
 
 
 #This needs to revamped to essentially handle input and properly reroute input to the proper functions and methods
