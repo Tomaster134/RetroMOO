@@ -24,8 +24,10 @@ def client(data):
 
     elif content['command'][0] == '"':
         new_data = content['command'][1:]
-        data = f'{new_data} {content["data"]}'
-        say(content['player'], data)
+        if ' ' in new_data:
+            data = f'{new_data} {content["data"]}'
+            say(content['player'], data)
+        else: say(content['player'], new_data)
 
     elif content['command'] == 'whisper':
         whisper(content['player'], content['data'])
@@ -71,9 +73,10 @@ def whisper(player, data):
     whisper_player = split[0]
     whisper_data = split[1]
     for world_player in events.world.players.values():
+        socketio.emit('event', {'message': f'{world_player}'}, to=player.session_id)
         if world_player.name == whisper_player:
             player.whisper(whisper_player=world_player, data=whisper_data)
-        else: socketio.emit('event', {'message': 'That player either doesn\'t exist, or isn\'t currently online.'}, to=player.session_id)
+    else: socketio.emit('event', {'message': 'That player either doesn\'t exist, or isn\'t currently online.'}, to=player.session_id)
 
 def move(player, direction, room):
     player.move(direction=direction, room=room)
