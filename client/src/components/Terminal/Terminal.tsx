@@ -7,7 +7,7 @@ import InventoryList from "../InventoryList/InventoryList";
 
 const Terminal = () => {
   let socketio = useRef(
-    io("localhost:5000", {
+    io("https://retromooapi.onrender.com", {
       auth: localStorage.user_id,
       autoConnect: false,
     })
