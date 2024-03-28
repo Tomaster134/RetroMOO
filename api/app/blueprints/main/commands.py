@@ -22,7 +22,10 @@ def client(data):
     if content['command'] == 'say':
         say(content['player'], content['data'])
 
-    if content['command'].lower() in ['move', 'go', 'north', 'south', 'east', 'west', 'n', 's', 'e', 'w', 'out', 'in']:
+    elif content['command'] == 'whisper':
+        whisper(content['player'], content['data'])
+
+    elif content['command'].lower() in ['move', 'go', 'north', 'south', 'east', 'west', 'n', 's', 'e', 'w', 'out', 'in']:
         content['data'] = content['data'].lower()
         if not content['data']:
             content['data'] = content['command'].lower()
@@ -37,16 +40,16 @@ def client(data):
         
         move(player=content['player'], direction=content['data'], room=content['room'])
 
-    if content['command'] == 'look' or content['command'] == 'l':
+    elif content['command'] == 'look' or content['command'] == 'l':
         look(player=content['player'], data=content['data'], room=content['room'])
 
-    if content['command'] == 'test':
+    elif content['command'] == 'test':
         test(content['player'], content['data'])
 
-    if content['command'] == 'save':
+    elif content['command'] == 'save':
         save(content['player'], content['data'])
     
-    if content['command'] == '@describe':
+    elif content['command'] == '@describe':
         set_description(content['player'], content['data'])
 
     else: socketio.emit('event', {'message': 'Sorry, that\'s not a command I currently understand!'}, to=content['player'].session_id)
@@ -57,6 +60,9 @@ def client(data):
         
 def say(player, data):
     player.speak(data)
+
+def whisper(player, data):
+    pass
 
 def move(player, direction, room):
     player.move(direction=direction, room=room)
