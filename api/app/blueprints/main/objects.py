@@ -352,7 +352,7 @@ class Player(Character):
                 socketio.emit('event', {'message': 'Jesus man they\'re already dead calm down. Go talk to a psychiatrist or something.'}, to=self.session_id)
             else:
                 socketio.emit('event', {'message': f'{self.name} slams their fist into {victim.name}, killing them instantly.'}, to=self.location, skip_sid=self.session_id)
-                socketio.emit('event', {'message': f'You slam your first into {victim.name}, killing them instantly.'}, to=self.session_id)
+                socketio.emit('event', {'message': f'You slam your fist into {victim.name}, killing them instantly.'}, to=self.session_id)
                 victim.deceased = True
                 return
 

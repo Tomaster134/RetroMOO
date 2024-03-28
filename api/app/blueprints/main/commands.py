@@ -119,7 +119,7 @@ def combat(player, data):
             victim = npc
             player.combat(victim=victim)
             return
-    socketio.emit('event', {'message': f'Woah there killer! I\'m not sure who you\'re trying to attack, but "{data}" certainly isn\'t here. Maybe take out your aggression on a punching bag?'})
+    socketio.emit('event', {'message': f'Woah there killer! I\'m not sure who you\'re trying to attack, but "{data}" certainly isn\'t here. Maybe take out your aggression on a punching bag?'}, to=player.session_id)
     
 def inventory_display(player):
     player.inventory_display()
