@@ -20,7 +20,7 @@ def client(data):
     }
 
     if content['command'] == 'who':
-        events.world.world_who([content['player']])
+        events.world.world_who(content['player'])
 
     elif content['command'] == 'say':
         say(content['player'], content['data'])
