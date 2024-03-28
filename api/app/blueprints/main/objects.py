@@ -29,6 +29,16 @@ class World():
         for room in self.rooms.values():
             print(id(room), room.name, room.contents)
 
+    def world_who(self, player):
+        player_list = []
+        for player in self.players.values():
+            player_list.append(player.name)
+        output = ''
+        for player in player_list:
+            output += f'{player}, '
+        output += f'are currently online.'
+        socketio.emit('event', {'message': output}, to=player.session_id)
+
     #Might not use this, and instead use individual pickles for each entity type for modularization
     # def world_save(self):
     #     with open('app/data/world_db.pkl', 'wb') as dill_file:
