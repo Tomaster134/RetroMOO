@@ -13,6 +13,8 @@ from flask_cors import CORS
 
 #Creates a server object that is used to wrap the app for websocket functionality
 socketio = SocketIO(cors_allowed_origins=['https://retromoo.onrender.com'], always_connect=True)
+#https://retromoo.onrender.com
+
 
 #function that gets called when flask app is built
 def create_app():

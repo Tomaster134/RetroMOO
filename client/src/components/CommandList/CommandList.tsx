@@ -95,6 +95,30 @@ export default function CommandList() {
           <MenuItem onClick={handleClose}>Whisper</MenuItem>
         </Tooltip>
         <Tooltip
+          title="ie: *get rock*, *pickup stick*"
+          placement="right"
+          slotProps={{
+            popper: {
+              modifiers: [{ name: "offset", options: { offset: [0, -14] } }],
+            },
+          }}
+          arrow
+        >
+          <MenuItem onClick={handleClose}>Get</MenuItem>
+        </Tooltip>
+        <Tooltip
+          title="ie: *drop rock* *discard stick*"
+          placement="right"
+          slotProps={{
+            popper: {
+              modifiers: [{ name: "offset", options: { offset: [0, -14] } }],
+            },
+          }}
+          arrow
+        >
+          <MenuItem onClick={handleClose}>Drop</MenuItem>
+        </Tooltip>
+        <Tooltip
           title="ie: *attack bob*, *kill bob*"
           placement="right"
           slotProps={{

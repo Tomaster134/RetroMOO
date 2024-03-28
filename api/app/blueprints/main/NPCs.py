@@ -51,5 +51,17 @@ npc_dict = {
         'can_wander': True,
         'attackable': False,
     },
-
+    'Wise Man': {
+        'name': 'Old Wise Man',
+        'aliases': ['old', 'wise', 'man', 'old wise man', 'geezer', 'old man'],
+        'description': 'Hunched over and wearing a rough spun robe, this guy has seen it all. He looks like he has some good advice, should you be willing to listen.',
+        'location': '-1,-1',
+        'home': '-1,-1',
+        'deceased': False,
+        'health': 10,
+        'level': 1,
+        'ambiance_list': ['The old man takes a deep breath. You wonder what he ponders.', 'The old man looks at you, eyebrows raised. "Would ya like a candy, son?" he asks.', 'You hear the old man mutter something about the inevitability of violence.'],
+        'can_wander': False,
+        'attackable': True,
+    },
 }

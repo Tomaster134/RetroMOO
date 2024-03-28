@@ -6,6 +6,7 @@ import itertools
 from flask_socketio import join_room, leave_room
 import app.blueprints.main.rooms as room_file
 import app.blueprints.main.NPCs as npc_file
+import app.blueprints.main.items as item_file
 from random import randint
 
 #World class that holds all entities
@@ -26,6 +27,13 @@ class World():
             npcs.update({new_npc.id: new_npc})
         self.npcs = npcs
 
+        for item in item_file.item_dict.values():
+            new_item = Item(item['name'], item['description'], item['aliases'], item['group'], item['weight'], item['location'])
+            for room_id, room in self.rooms.items():
+                if new_item.location == room_id:
+                    room.contents['Items'].update({new_item.id: new_item})
+                    print(f'added {new_item.name} to {room.name}. Room inventory is {room.contents}')
+
     def world_test(self):
         for room in self.rooms.values():
             print(id(room), room.name, room.contents)
@@ -34,10 +42,9 @@ class World():
         player_list = []
         for player_who in self.players.values():
             player_list.append(player_who.name)
-        output = ''
+        output = '<br/> Currently Online Player: <br/>'
         for player_who in player_list:
-            output += f'{player_who}, '
-        output += f'are currently online.'
+            output += f'{player_who}<br/>'
         socketio.emit('event', {'message': output}, to=player.session_id)
 
     #Might not use this, and instead use individual pickles for each entity type for modularization
@@ -83,9 +90,12 @@ class Room(Entity):
 
     def describe_contents(self, caller):
         output = ''
+        item_output = ''
         player_list = dict(self.contents['Players'])
         del player_list[caller.id]
         player_key = list(enumerate(player_list))
+        item_list = dict(self.contents['Items'])
+        item_key = list(enumerate(item_list))
         npc_list = dict(self.contents['NPCs'])
         corpse_list = {}
         for id, npc in npc_list.copy().items():
@@ -95,12 +105,15 @@ class Room(Entity):
         npc_key = list(enumerate(npc_list))
         total_list = []
         total_corpses = []
+        total_items = []
         for i in range(len(player_list)):
             total_list.append(f'<em><strong>{player_list[player_key[i][1]].name}</strong></em>')
         for i in range(len(npc_list)):
             total_list.append(npc_list[npc_key[i][1]].name)
         for i in range(len(corpse_list)):
             total_corpses.append(corpse_list[corpse_key[i][1]].name)
+        for i in range(len(item_list)):
+            total_items.append(item_list[item_key[i][1]].name)
         if len(total_list) == 0:
             pass
         elif len(total_list) == 1:
@@ -124,8 +137,26 @@ class Room(Entity):
                 if i == len(total_corpses)-1:
                     output += f'and {total_corpses[i]} lay here.'
                 else: output += f' The bodies of {total_corpses[i]}, '
+
+
+        if len(total_items) == 0:
+            pass
+        elif len(total_items) == 1:
+            item_output += f' There is a {total_items[0]} here.'
+        elif len(total_items) == 2:
+            item_output += f' There is a {total_items[0]} and a {total_items[1]} here.'
+        else:
+            for i in range(len(total_items)):
+                if i == 0:
+                    item_output += f'A {total_items[i]}, '
+                if i == len(total_items)-1:
+                    item_output += f'and {total_items[i]} lay here.'
+                else: item_output += f'a {total_items[i]}, '
+
+        
         
         socketio.emit('event', {'message': output}, to=caller.session_id)
+        socketio.emit('event', {'message': item_output}, to=caller.session_id)
         socketio.emit('event', {'message': self.describe_exits()}, to=caller.session_id)
 
             
@@ -201,6 +232,11 @@ class Player(Character):
                             socketio.emit('event', {'message': npc.description_deceased}, to=self.session_id)
                             return
                         socketio.emit('event', {'message': npc.description}, to=self.session_id)
+                        return
+            for item in room.contents['Items'].values():
+                for alias in item.aliases:
+                    if alias.lower().startswith(data.lower()):
+                        socketio.emit('event', {'message': item.description}, to=self.session_id)
                         return
             for direction, room in room.exits.items():
                 if direction.lower().startswith(data.lower()):
@@ -338,6 +374,71 @@ class Player(Character):
         socketio.emit('event', {'message': f'<br/><strong>{events.world.rooms[self.location].name}</strong>'}, to=self.session_id)
         socketio.emit('event', {'message': events.world.rooms[self.location].description}, to=self.session_id)
         events.world.rooms[self.location].describe_contents(self)
+    
+    def inventory_update(self):
+        inventory_send = []
+        for item_inv in self.inventory:
+                item_info = {
+                    'id': item_inv.id,
+                    'name': item_inv.name,
+                    'group': item_inv.group
+                }
+                inventory_send.append(item_info)
+        socketio.emit('inventory', {'inventory': inventory_send}, to=self.session_id)
+
+    def inventory_display(self):
+        inventory_send = []
+        if not self.inventory:
+            socketio.emit('event', {'message': 'Sorry bud, you don\'t have anything in your inventory right now.'}, to=self.session_id)
+        else:
+            output = '<br/>Inventory:<br/>'
+            for item_inv in self.inventory:
+                item_info = {
+                    'id': item_inv.id,
+                    'name': item_inv.name,
+                    'group': item_inv.group
+                }
+                output += f'{item_inv.name}<br/>'
+                inventory_send.append(item_info)
+            print(inventory_send)
+            socketio.emit('event', {'message': output}, to=self.session_id)
+            socketio.emit('inventory', {'inventory': inventory_send}, to=self.session_id)
+
+    def item_get(self, item, room):
+        inventory_send = []
+        for item_id, room_item in room.contents['Items'].copy().items():
+            if item in room_item.aliases:
+                self.inventory.append(room.contents['Items'].pop(item_id))
+                socketio.emit('event', {'message': f'You get the {room_item.name}.'})
+                for item_inv in self.inventory:
+                    item_info = {
+                        'id': item_inv.id,
+                        'name': item_inv.name,
+                        'group': item_inv.group
+                    }
+                    inventory_send.append(item_info)
+                socketio.emit('inventory', {'inventory': inventory_send}, to=self.session_id)
+                return
+        socketio.emit('event', {'message': f'I have absolutely no clue what you\'re trying to get here. I don\'t see a "{item}" here.'}, to=self.session_id)
+
+    def item_drop(self, item, room):
+        inventory_send = []
+        for i in range(len(self.inventory.copy())):
+            for alias in self.inventory[i].aliases:
+                if item == alias:
+                    drop_item = self.inventory.pop(i)
+                    room.contents['Items'][drop_item.id] = drop_item
+                    socketio.emit('event', {'message': f'You drop the {drop_item.name}.'})
+                    for item_inv in self.inventory:
+                        item_info = {
+                            'id': item_inv.id,
+                            'name': item_inv.name,
+                            'group': item_inv.group
+                        }
+                        inventory_send.append(item_info)
+                    socketio.emit('inventory', {'inventory': inventory_send}, to=self.session_id)
+                    return
+        socketio.emit('event', {'message': f'Check your pockets, cause I don\'t see a "{item}" in your inventory.'})
 
 #Class that is controlled by the server. Capable of being interacted with.
 class NPC(Character):
@@ -389,11 +490,13 @@ class NPC(Character):
 #Class that is incapable of autonomous action. Inanimate objects and such.
 class Item(Entity):
     id = itertools.count()
-    def __init__(self, name, description, group, weight, equippable=False) -> None:
+    def __init__(self, name, description, aliases, group, weight, location=None, equippable=False) -> None:
         super().__init__(name, description)
+        self.aliases = aliases
         self.id = next(Item.id)
         self.group = group #Type of item. Food, equipment, quest, etc
         self.weight = weight #Weight of item. Will be used alongside character strength to determine if the item can be picked up, pulled to inventory, etc
+        self.location = location
         self.equippable = equippable #Can you equip the item. Unsure if redundant with equipment class
 
 #Subclass of items that is capable of being equipped by the Character class

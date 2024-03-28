@@ -3,20 +3,25 @@ import { io } from "socket.io-client";
 import Map from "../Map/Map";
 import Messages from "../Messages/Messages";
 import CommandList from "../CommandList/CommandList";
+import InventoryList from "../InventoryList/InventoryList";
 
 const Terminal = () => {
   let socketio = useRef(
-    io("https://retromooapi.onrender.com/", {
+    io("https://retromooapi.onrender.com", {
       auth: localStorage.user_id,
       autoConnect: false,
     })
   );
+//https://retromooapi.onrender.com
+
 
   const [messages, setMessages] = useState([{ message: "", time: "" }]);
 
   const [map, setMap] = useState("");
 
   const [message, setMessage] = useState("");
+
+  const [inventory, setInventory] = useState<{id: number, name: string, group: string}[]>([])
 
   useEffect(() => {
     socketio.current.connect();
@@ -34,6 +39,9 @@ const Terminal = () => {
     });
     socketio.current.on("map", (data: { map: string }) => {
       setMap(data.map);
+    });
+    socketio.current.on("inventory", (data: { inventory: {id: number, name: string, group: string}[] }) => {
+      setInventory(data.inventory);
     });
   }, []);
 
@@ -59,6 +67,9 @@ const Terminal = () => {
       </div>
       <div className="room-commands">
         <CommandList />
+      </div>
+      <div className="room-inventory">
+        <InventoryList inventory={inventory} />
       </div>
       <div className="room-box">
         <h2 className="room-header">Narnia</h2>

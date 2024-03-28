@@ -54,6 +54,7 @@ def connect(auth):
     session['player'] = player
     join_room(location)
     player.location_map()
+    player.inventory_update()
     socketio.emit('event', {'message': f'{username} has connected to the server'})
     player.connection()
 
