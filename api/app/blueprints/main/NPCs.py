@@ -2,7 +2,7 @@ npc_dict = {
     'Crier': {
         'name': 'Bob, the Town Crier',
         'aliases': ['Bob', 'Crier', 'The Town Crier'],
-        'description': 'A young man dressed in common clothing, looking about as if to see who he\'ll announce the latest news to.',
+        'description': 'A young man dressed in flamboyant but common clothing, looking about as if to see who he\'ll announce the latest news to.',
         'location': '0,0',
         'home': '0,0',
         'deceased': False,

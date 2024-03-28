@@ -1,7 +1,7 @@
 room_dict = {
     (0,0): {
         'name': 'Town Square',
-        'description': 'This is the center of town! More to come.',
+        'description': 'This is the center of town! People flow around you, living in their own quiet worlds. You notice that nobody is making eye contact with you, and some people go out of their way to avoid you.',
         'position': '0,0',
         'exits': {
             'north': '0,1',
@@ -14,7 +14,7 @@ room_dict = {
     },
     (0,1): {
         'name': 'Pavilion',
-        'description': 'There is a pavilion here with two buildings to the east and west.',
+        'description': 'There is a pavilion here with two buildings to the east and west. The building to the west towers over all the other structures around it, while the building to the east is small and humble, with people congregating outside.',
         'position': '0,1',
         'exits': {
             'south': '0,0',
@@ -26,7 +26,7 @@ room_dict = {
     },
     (0,-1): {
         'name': 'Gravel Path',
-        'description': 'There is a gravel path here, leading to a forest to the east and a lake to the west.',
+        'description': 'There is a gravel path here, branching off to the east and west. To the west you see a body of water, to the east trees dominate your view.',
         'position': '0,-1',
         'exits': {
             'north': '0,0',
@@ -38,7 +38,7 @@ room_dict = {
     },
     (1,0): {
         'name': 'Neighborhood',
-        'description': 'There are many houses here. All appear locked.',
+        'description': 'There are many houses here. All appear locked. You can hear people talking through the thin walls.',
         'position': '1,0',
         'exits': {
             'west': '0,0'
@@ -48,7 +48,7 @@ room_dict = {
     },
     (-1,0): {
         'name': 'Barracks',
-        'description': 'You are in the entrance to the barracks.',
+        'description': 'Before you lies a squat building, dark and menacing. You notice a small sign posted in front of the walkway inside. It says "COUNTY BARRACKS"',
         'position': '-1,0',
         'exits': {
             'east': '0,0',
@@ -80,7 +80,7 @@ room_dict = {
     },
     (1,1): {
         'name': 'General Store',
-        'description': 'A small shop that sells various essential goods.',
+        'description': 'A small shop that sells various essential goods. People with nothing better to do with their day are sitting in chairs out front, making small talk.',
         'position': '1,1',
         'exits': {
             'west': '0,1'
@@ -90,7 +90,7 @@ room_dict = {
     },
     (1,-1): {
         'name': 'Forest',
-        'description': 'A foreboding forest. You feel the trees pressing down above you, and every noise makes you twitch in fear.',
+        'description': 'A foreboding forest. You feel the trees pressing down above you, and every noise makes you twitch in fear. A path to the east leads even deeper, but your body feels an almost physical pressure not to proceed.',
         'position': '1,-1',
         'exits': {
             'west': '0,-1',
@@ -101,13 +101,13 @@ room_dict = {
     },
     (-1,-1): {
         'name': 'Lake',
-        'description': 'A placid lake. You feel at peace here.',
+        'description': 'A placid lake. You feel at peace here. There is a couple rowing a boat in the distance.',
         'position': '-1,-1',
         'exits': {
             'east': '0,-1',
         },
         'icon': '<span class="map-square" style="background-color:mediumblue">~~</span>',
-        'ambiance_list': ['Birds chirp overhead.', 'The sound of the lake lapping at the shore make you want to close your eyes.']
+        'ambiance_list': ['Birds chirp overhead.', 'The sound of the lake lapping at the shore make you want to close your eyes.', 'You see one of the people on the rowboat gracefully dive in. They swim about for a minute before clambering back into the boat.']
     },
     'Mayoral Mansion': {
         'name': 'The Mayoral Mansion',
@@ -121,13 +121,13 @@ room_dict = {
     },
     (2,-1): {
         'name': 'Forest',
-        'description': 'A foreboding forest. You feel the trees pressing down above you, and every noise makes you twitch in fear.',
+        'description': 'The pressure intensifies. You feel like there are eyes watching you everywhere, and not all of them are friendly.',
         'position': '2,-1',
         'exits': {
             'west': '1,-1'
         },
         'icon': '<span class="map-square" style="background-color:olivedrab">Tt</span>',
-        'ambiance_list': ['A twig snaps, and your heart jumps.', 'You see a dark shape flit through the trees.']
+        'ambiance_list': ['A twig snaps, and your heart jumps.', 'You see a dark shape flit through the trees.', 'An ominious growl can be heard in the distance.']
     },
 }
 

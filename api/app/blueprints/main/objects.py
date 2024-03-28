@@ -42,7 +42,7 @@ class World():
         player_list = []
         for player_who in self.players.values():
             player_list.append(player_who.name)
-        output = '<br/> Currently Online Player: <br/>'
+        output = '<br/> Currently Online Players: <br/>'
         for player_who in player_list:
             output += f'{player_who}<br/>'
         socketio.emit('event', {'message': output}, to=player.session_id)
