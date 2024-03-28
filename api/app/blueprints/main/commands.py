@@ -92,8 +92,9 @@ def combat(player, data):
             player.combat(victim=victim)
             return
     for npc in events.world.npcs.values():
-        if npc.name == data:
+        if npc.name == data or npc.aliases == data:
             victim = npc
+            socketio('event', {'message': f'successful NPC'}, to=player.session_id)
             player.combat(victim=victim)
             return
     
