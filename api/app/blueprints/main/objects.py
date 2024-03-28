@@ -340,11 +340,12 @@ class Player(Character):
 
     def whisper(self, whisper_player, data):
         socketio.emit('event', {'message': f'The wind breathes against your ear, and you can faintly hear "{data}". You get a feeling it\'s from {self.name}.'}, to=whisper_player.session_id)
+        socketio.emit('event', {'message': 'You whisper your message to the wind.'}, to=self.session_id)
 
     def combat(self, victim):
         if not victim.attackable:
             print()
-            socketio.emit('event', {'message': f'It\'s ok. I get it. Sometimes someone says something and it just makes you so angry. Unfortunately, whoever you\'re currently targeted with your untethered rage is just so important we can\'t let you hurt them. Sorry bud, go punch a tree.'}, to=self.session_id)
+            socketio.emit('event', {'message': 'It\'s ok. I get it. Sometimes someone says something and it just makes you so angry. Unfortunately, whoever you\'re currently targeted with your untethered rage is just so important we can\'t let you hurt them. Sorry bud, go punch a tree.'}, to=self.session_id)
             return
         if isinstance(victim, NPC):
             if victim.deceased:
@@ -421,7 +422,7 @@ class Player(Character):
         for item_id, room_item in room.contents['Items'].copy().items():
             if item in room_item.aliases:
                 self.inventory.append(room.contents['Items'].pop(item_id))
-                socketio.emit('event', {'message': f'You get the {room_item.name}.'})
+                socketio.emit('event', {'message': f'You get the {room_item.name}.'}, to=self.session_id)
                 for item_inv in self.inventory:
                     item_info = {
                         'id': item_inv.id,
@@ -440,7 +441,7 @@ class Player(Character):
                 if item == alias:
                     drop_item = self.inventory.pop(i)
                     room.contents['Items'][drop_item.id] = drop_item
-                    socketio.emit('event', {'message': f'You drop the {drop_item.name}.'})
+                    socketio.emit('event', {'message': f'You drop the {drop_item.name}.'}, to=self.session_id)
                     for item_inv in self.inventory:
                         item_info = {
                             'id': item_inv.id,
