@@ -271,6 +271,7 @@ class Player(Character):
         socketio.emit('event', {'message': f'The wind breathes against your ear, and you can faintly hear "{data}". You get a feeling it\'s from {self.name}.'}, to=whisper_player.session_id)
 
     def combat(self, victim):
+        socketio('event', {'message': f'{isinstance(victim, NPC)}'}, to=self.session_id)
         if isinstance(victim, NPC):
             socketio('event', {'message': f'{self.name} slams their fist into {victim.name}, killing them instantly.'}, to=self.location)
             socketio('event', {'message': f'You slam your first into {victim.name}, killing them instantly.'})
