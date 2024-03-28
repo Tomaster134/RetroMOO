@@ -14,7 +14,6 @@ def world_timer():
      print('world timer triggered')
      socketio.sleep(10)
      while True:
-            counter += 1
             if client_list:
                 socketio.sleep(10)
                 for character in world.npcs.values():
