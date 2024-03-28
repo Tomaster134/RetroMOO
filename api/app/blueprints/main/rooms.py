@@ -48,7 +48,7 @@ room_dict = {
     },
     (-1,0): {
         'name': 'Barracks',
-        'description': 'You are in the entrance to the baracks.',
+        'description': 'You are in the entrance to the barracks.',
         'position': '-1,0',
         'exits': {
             'east': '0,0'

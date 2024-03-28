@@ -23,4 +23,17 @@ npc_dict = {
         'ambiance_list': ['The Mayor snaps at a servant, demanding wine.', 'The Mayor chuckles to himself, at a joke only he knows.', 'The Mayor looks askance at the dirt you tracked in from the outdoors.'],
         'can_wander': False,
     },
+     'Mercenary': {
+        'name': 'Thor, the Local Mercenary',
+        'aliases': ['Merc', 'Mercenary', 'The Local Mercenary', 'Thor', 'Dragonborn'],
+        'description': 'A fearsome Emerald Dragonborn, clad in furs. Two wicked axes adorn his back.',
+        'location': '-1,0',
+        'home': '0,0',
+        'deceased': False,
+        'health': 100,
+        'level': 1,
+        'ambiance_list': ['The Mercenary mutters to himself at your glance, "Newbies never seen dragons blood before?"'],
+        'can_wander': False,
+    },
+
 }
