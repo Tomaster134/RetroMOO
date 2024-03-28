@@ -17,7 +17,7 @@ export default function AccountCards(props: IProps) {
       <Card variant="outlined">
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {props.account.player_id}
+           Player ID: {props.account.player_id}
           </Typography>
           <Typography variant="h5" component="div">
             {props.account.player_name}

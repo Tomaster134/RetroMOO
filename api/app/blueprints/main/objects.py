@@ -11,6 +11,7 @@ from random import randint
 #World class that holds all entities
 class World():
     def __init__(self) -> None:
+        self.timer_active = False
         rooms = {}
         for room in room_file.room_dict.values():
             new_room = Room(room['name'], room['description'], room['position'], room['exits'], room['icon'], room['ambiance_list'])
@@ -20,7 +21,7 @@ class World():
 
         npcs = {}
         for npc in npc_file.npc_dict.values():
-            new_npc = NPC(npc['name'], npc['aliases'], npc['description'], npc['deceased'], npc['health'], npc['level'], npc['location'], npc['home'], npc['ambiance_list'], npc['can_wander'])
+            new_npc = NPC(npc['name'], npc['aliases'], npc['description'], npc['deceased'], npc['health'], npc['level'], npc['location'], npc['home'], npc['ambiance_list'], npc['can_wander'], npc['attackable'])
             self.rooms[new_npc.location].contents['NPCs'].update({new_npc.id: new_npc})
             npcs.update({new_npc.id: new_npc})
         self.npcs = npcs
@@ -86,12 +87,20 @@ class Room(Entity):
         del player_list[caller.id]
         player_key = list(enumerate(player_list))
         npc_list = dict(self.contents['NPCs'])
+        corpse_list = {}
+        for id, npc in npc_list.copy().items():
+            if npc.deceased:
+                corpse_list[id] = npc_list.pop(id)
+        corpse_key = list(enumerate(corpse_list))
         npc_key = list(enumerate(npc_list))
         total_list = []
+        total_corpses = []
         for i in range(len(player_list)):
             total_list.append(f'<em><strong>{player_list[player_key[i][1]].name}</strong></em>')
         for i in range(len(npc_list)):
             total_list.append(npc_list[npc_key[i][1]].name)
+        for i in range(len(corpse_list)):
+            total_corpses.append(corpse_list[corpse_key[i][1]].name)
         if len(total_list) == 0:
             pass
         elif len(total_list) == 1:
@@ -104,6 +113,18 @@ class Room(Entity):
                     output += f'and {total_list[i]} stand here.'
                 else: output += f'{total_list[i]}, '
 
+        if len(total_corpses) == 0:
+            pass
+        elif len(total_corpses) == 1:
+            output += f' The body of {total_corpses[0]} is on the ground here.'
+        elif len(total_corpses) == 2:
+            output += f' The bodies of {total_corpses[0]} and {total_corpses[1]} lay here.'
+        else:
+            for i in range(len(total_corpses)):
+                if i == len(total_corpses)-1:
+                    output += f'and {total_corpses[i]} lay here.'
+                else: output += f' The bodies of {total_corpses[i]}, '
+        
         socketio.emit('event', {'message': output}, to=caller.session_id)
         socketio.emit('event', {'message': self.describe_exits()}, to=caller.session_id)
 
@@ -147,6 +168,7 @@ class Player(Character):
 
     def connection(self):
         events.world.rooms[self.location].contents['Players'].update({self.id: self})
+        socketio.emit('event', {'message': f'<br/><strong>{events.world.rooms[self.location].name}</strong>'}, to=self.session_id)
         socketio.emit('event', {'message': events.world.rooms[self.location].description}, to=self.session_id)
         events.world.rooms[self.location].describe_contents(self)
 
@@ -160,6 +182,7 @@ class Player(Character):
     def look(self, data, room):
         if data == '':
             socketio.emit('event', {'message': self.location}, to=self.session_id)
+            socketio.emit('event', {'message': f'<br/><strong>{room.name}</strong>'}, to=self.session_id)
             socketio.emit('event', {'message': room.description}, to=self.session_id)
             room.describe_contents(self)
         elif data in ['me', 'myself']:
@@ -174,6 +197,9 @@ class Player(Character):
             for npc in room.contents['NPCs'].values():
                 for alias in npc.aliases:
                     if alias.lower().startswith(data.lower()):
+                        if npc.deceased:
+                            socketio.emit('event', {'message': npc.description_deceased}, to=self.session_id)
+                            return
                         socketio.emit('event', {'message': npc.description}, to=self.session_id)
                         return
             for direction, room in room.exits.items():
@@ -271,10 +297,15 @@ class Player(Character):
         socketio.emit('event', {'message': f'The wind breathes against your ear, and you can faintly hear "{data}". You get a feeling it\'s from {self.name}.'}, to=whisper_player.session_id)
 
     def combat(self, victim):
-        socketio('event', {'message': f'{isinstance(victim, NPC)}'}, to=self.session_id)
+        if not victim.attackable:
+            print()
+            socketio.emit('event', {'message': f'It\'s ok. I get it. Sometimes someone says something and it just makes you so angry. Unfortunately, whoever you\'re currently targeted with your untethered rage is just so important we can\'t let you hurt them. Sorry bud, go punch a tree.'}, to=self.session_id)
+            return
         if isinstance(victim, NPC):
-            socketio('event', {'message': f'{self.name} slams their fist into {victim.name}, killing them instantly.'}, to=self.location)
-            socketio('event', {'message': f'You slam your first into {victim.name}, killing them instantly.'})
+            socketio.emit('event', {'message': f'{self.name} slams their fist into {victim.name}, killing them instantly.'}, to=self.location, skip_sid=self.session_id)
+            socketio.emit('event', {'message': f'You slam your first into {victim.name}, killing them instantly.'}, to=self.session_id)
+            victim.deceased = True
+            return
 
     def move(self, direction, room):
         if direction not in room.exits:
@@ -304,17 +335,19 @@ class Player(Character):
         join_room(self.location)
         self.location_map()
         events.world.rooms[self.location].contents['Players'].update({self.id: self})
+        socketio.emit('event', {'message': f'<br/><strong>{events.world.rooms[self.location].name}</strong>'}, to=self.session_id)
         socketio.emit('event', {'message': events.world.rooms[self.location].description}, to=self.session_id)
         events.world.rooms[self.location].describe_contents(self)
 
 #Class that is controlled by the server. Capable of being interacted with.
 class NPC(Character):
     id = itertools.count()
-    def __init__(self, name, aliases, description, deceased, health, level, location, home, ambiance_list, can_wander, stats=dict(default_stats)) -> None:
+    def __init__(self, name, aliases, description, deceased, health, level, location, home, ambiance_list, can_wander, attackable, stats=dict(default_stats)) -> None:
         self.id = next(NPC.id)
         self.name = name
         self.aliases = aliases
         self.description = description
+        self.description_deceased = f'The corpse of {self.name}, crumpled and torn.'
         self.deceased = deceased
         self.health = health
         self.level = level
@@ -324,8 +357,11 @@ class NPC(Character):
         self.can_wander = can_wander
         self.inventory = list([])
         self.in_combat = False
+        self.attackable = attackable
 
     def ambiance(self):
+        if self.deceased:
+            return
         numb = randint(1,5)
         if numb == 5:
             socketio.emit('event', {'message': f'{self.ambiance_list[randint(0,len(self.ambiance_list)-1)]}'}, to=self.location)

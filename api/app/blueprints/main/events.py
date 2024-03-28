@@ -14,14 +14,16 @@ def world_timer():
      print('world timer triggered')
      socketio.sleep(10)
      while True:
-            print('world timer active')
             if client_list:
                 socketio.sleep(10)
                 for character in world.npcs.values():
                      character.ambiance()
                 for room in world.rooms.values():
                      room.ambiance()
-            else: break
+            else:
+                 world.timer_active = False
+                 print('world timer deactivated')
+                 break
 
 
 #This is an event that occurs whenever a new connection is detected by the socketio server. Connection needs to properly connect the user with their Player object, update the Player object's session_id so private server emits can be transmitted to that player only
@@ -42,7 +44,8 @@ def connect(auth):
     location = player.location
     player.session_id = request.sid
     world.players.update({player.id: player})
-    if not client_list:
+    if not world.timer_active:
+        world.timer_active = True
         socketio.start_background_task(world_timer)
     client_list.append(player.session_id)
     print(f'client list is {client_list}')

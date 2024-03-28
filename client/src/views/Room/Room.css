@@ -110,6 +110,17 @@ body {
   position: absolute;
 }
 
+.room-commands {
+  top: 175px;
+  right: 280px;
+  position: absolute;
+}
+
+#command-button {
+  font-size: 20px;
+  font-family: "Trade Winds", system-ui;
+}
+
 .map-header {
   font-size: 40px;
   font-family: "Trade Winds", system-ui;

@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import Map from "../Map/Map";
 import Messages from "../Messages/Messages";
+import CommandList from "../CommandList/CommandList";
 
 const Terminal = () => {
   let socketio = useRef(
-    io("https://retromooapi.onrender.com", {
+    io("https://retromooapi.onrender.com/", {
       auth: localStorage.user_id,
       autoConnect: false,
     })
@@ -55,6 +56,9 @@ const Terminal = () => {
     <div className="papyrus-box">
       <div className="map-box" id="map-box">
         <Map map={map} />
+      </div>
+      <div className="room-commands">
+        <CommandList />
       </div>
       <div className="room-box">
         <h2 className="room-header">Narnia</h2>
