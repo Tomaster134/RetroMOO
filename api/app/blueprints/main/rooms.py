@@ -51,10 +51,21 @@ room_dict = {
         'description': 'You are in the entrance to the barracks.',
         'position': '-1,0',
         'exits': {
-            'east': '0,0'
+            'east': '0,0',
+            'in': 'Barracks Interior',
         },
         'icon': '<span class="map-square" style="background-color:indianred">Br</span>',
         'ambiance_list': ['The sound of clanging metal and shouts can be faintly heard.', 'A local town guard eyes you, wondering what your business is.']
+    },
+    'Barracks Interior': {
+        'name': 'Barracks Interior',
+        'description': 'You stand in front of a circle, the interior of which has straw rushes covering the ground. The smell of sweat and old blood permeates the room. You can faintly see bloodstains beneath the straw.',
+        'position': 'Barracks Interior',
+        'exits': {
+            'out': '-1,0',
+        },
+        'icon': '<span class="map-square" style="background-color:indianred">BR</span>',
+        'ambiance_list': ['Grunts and dull thuds filter through the walls. They must be training new recruits.', 'You catch a whiff of unwashed bodies and dust.']
     },
     (-1,1): {
         'name': 'Mayor\'s Courtyard',

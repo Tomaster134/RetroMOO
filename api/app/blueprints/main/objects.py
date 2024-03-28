@@ -134,9 +134,11 @@ class Room(Entity):
             output += f' The bodies of {total_corpses[0]} and {total_corpses[1]} lay here.'
         else:
             for i in range(len(total_corpses)):
+                if i == 0:
+                    item_output += f'The bodies of {total_corpses[i]}, '
                 if i == len(total_corpses)-1:
-                    output += f'and {total_corpses[i]} lay here.'
-                else: output += f' The bodies of {total_corpses[i]}, '
+                    item_output += f'and {total_corpses[i]} lay here.'
+                else: item_output += f'{total_corpses[i]}, '
 
 
         if len(total_items) == 0:
@@ -205,6 +207,13 @@ class Player(Character):
 
     def disconnection(self):
         del events.world.rooms[self.location].contents['Players'][self.id]
+
+    # def player_save(self):
+    #         player_account = PlayerAccount.query.get(self.id)
+    #         player_account.player_info = dill.dumps(self)
+    #         player_account.save()
+    #     print(f'{self.name} saved')
+    #     return
 
     def set_description(self, data):
         self.description = data
@@ -338,10 +347,13 @@ class Player(Character):
             socketio.emit('event', {'message': f'It\'s ok. I get it. Sometimes someone says something and it just makes you so angry. Unfortunately, whoever you\'re currently targeted with your untethered rage is just so important we can\'t let you hurt them. Sorry bud, go punch a tree.'}, to=self.session_id)
             return
         if isinstance(victim, NPC):
-            socketio.emit('event', {'message': f'{self.name} slams their fist into {victim.name}, killing them instantly.'}, to=self.location, skip_sid=self.session_id)
-            socketio.emit('event', {'message': f'You slam your first into {victim.name}, killing them instantly.'}, to=self.session_id)
-            victim.deceased = True
-            return
+            if victim.deceased:
+                socketio.emit('event', {'message': 'Jesus man they\'re already dead calm down. Go talk to a psychiatrist or something.'}, to=self.session_id)
+            else:
+                socketio.emit('event', {'message': f'{self.name} slams their fist into {victim.name}, killing them instantly.'}, to=self.location, skip_sid=self.session_id)
+                socketio.emit('event', {'message': f'You slam your first into {victim.name}, killing them instantly.'}, to=self.session_id)
+                victim.deceased = True
+                return
 
     def move(self, direction, room):
         if direction not in room.exits:

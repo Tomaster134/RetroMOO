@@ -14,12 +14,19 @@ def world_timer():
      print('world timer triggered')
      socketio.sleep(10)
      while True:
+            counter += 1
             if client_list:
                 socketio.sleep(10)
                 for character in world.npcs.values():
                      character.ambiance()
                 for room in world.rooms.values():
                      room.ambiance()
+                    # for player in world.players.values():
+                    #     player_account = PlayerAccount.query.get(player.id)
+                    #     player_account.player_info = dill.dumps(player)
+                    #     player_account.save()
+
+                          
             else:
                  world.timer_active = False
                  print('world timer deactivated')
