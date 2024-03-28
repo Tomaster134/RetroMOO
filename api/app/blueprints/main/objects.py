@@ -221,7 +221,7 @@ class Player(Character):
 
     def look(self, data, room):
         if data == '':
-            socketio.emit('event', {'message': self.location}, to=self.session_id)
+            # socketio.emit('event', {'message': self.location}, to=self.session_id)
             socketio.emit('event', {'message': f'<br/><strong>{room.name}</strong>'}, to=self.session_id)
             socketio.emit('event', {'message': room.description}, to=self.session_id)
             room.describe_contents(self)
