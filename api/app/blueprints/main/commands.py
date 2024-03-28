@@ -49,6 +49,8 @@ def client(data):
     if content['command'] == '@describe':
         set_description(content['player'], content['data'])
 
+    else: socketio.emit('event', {'message': 'Sorry, that\'s not a command I currently understand!'}, to=content['player'].session_id)
+
 
 
 #This event should be moved to the Character class and using their move method

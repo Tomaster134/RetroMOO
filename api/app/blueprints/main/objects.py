@@ -168,9 +168,9 @@ class Player(Character):
             for direction, room in room.exits.items():
                 if direction.lower().startswith(data.lower()):
                     if events.world.rooms[room].name.startswith('The'):
-                        socketio.emit('event', {'message': f'{events.world.rooms[room].name} lies that way.'})
+                        socketio.emit('event', {'message': f'{events.world.rooms[room].name} lies that way.'}, to=self.session_id)
                         return
-                    socketio.emit('event', {'message': f'The {events.world.rooms[room].name} lies that way.'})
+                    socketio.emit('event', {'message': f'The {events.world.rooms[room].name} lies that way.'}, to=self.session_id)
                     return
                 
     def location_map(self):
