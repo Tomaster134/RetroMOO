@@ -31,6 +31,7 @@ class World():
 
     def world_who(self, player):
         player_list = []
+        socketio.emit('event', {'message': 'test'}, to=player.session_id)
         for player in self.players.values():
             player_list.append(player.name)
         output = ''
@@ -267,7 +268,7 @@ class Player(Character):
         socketio.emit('event', {'message': f'You say "{data}"'}, to=self.session_id)
 
     def whisper(self, whisper_player, data):
-        socketio.emit('event', {'message': f'The wind breathes against your ear, and you can faintly hear "{data}". You get a feeling it\'s from {whisper_player.name}.'}, to=whisper_player.session_id)
+        socketio.emit('event', {'message': f'The wind breathes against your ear, and you can faintly hear "{data}". You get a feeling it\'s from {self.name}.'}, to=whisper_player.session_id)
 
     def move(self, direction, room):
         if direction not in room.exits:

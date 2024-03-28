@@ -27,7 +27,7 @@ room.css {%endblock%} {%block content%}
   integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
   crossorigin="anonymous"
 ></script>
-<script src="../static/js/room.js"></script>
+<script type="module" src="../static/js/room.js"></script>
 {%for msg in messages%} {%if msg.type == 'message'%}
 <script>
   createMessage("{{msg.username}}", "{{msg.message}}");
