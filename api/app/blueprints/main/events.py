@@ -41,10 +41,10 @@ def connect(auth):
     username = player.name
     location = player.location
     player.session_id = request.sid
-    client_list.append(player.session_id)
     world.players.update({player.id: player})
     if not client_list:
         socketio.start_background_task(world_timer)
+    client_list.append(player.session_id)
     print(f'client list is {client_list}')
     print(f'players connected is {world.players}')
     session['player_id'] = player.id
