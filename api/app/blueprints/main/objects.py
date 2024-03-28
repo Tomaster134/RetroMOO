@@ -31,11 +31,12 @@ class World():
 
     def world_who(self, player):
         player_list = []
-        socketio.emit('event', {'message': 'test'}, to=player.session_id)
         for player in self.players.values():
+            socketio.emit('event', {'message': player.name}, to=player.session_id)
             player_list.append(player.name)
         output = ''
         for player in player_list:
+            socketio.emit('event', {'message': player.name}, to=player.session_id)
             output += f'{player}, '
         output += f'are currently online.'
         socketio.emit('event', {'message': output}, to=player.session_id)
