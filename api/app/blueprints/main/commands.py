@@ -20,7 +20,7 @@ def client(data):
     }
 
     if content['command'] == 'who':
-
+        pass
 
     if content['command'] == 'say':
         say(content['player'], content['data'])
