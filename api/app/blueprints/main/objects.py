@@ -423,7 +423,7 @@ class Player(Character):
             if item in room_item.aliases:
                 self.inventory.append(room.contents['Items'].pop(item_id))
                 socketio.emit('event', {'message': f'You get the {room_item.name}.'}, to=self.session_id)
-                socketio.emit('event', {'message': f'You see {room.name} grab a {room_item.name}.'}, to=self.location)
+                socketio.emit('event', {'message': f'You see {room_item.name} grab a {room_item.name}.'}, to=self.location)
                 for item_inv in self.inventory:
                     item_info = {
                         'id': item_inv.id,

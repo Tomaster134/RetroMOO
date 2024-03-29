@@ -106,17 +106,17 @@ def whisper(player, data):
 def combat(player, data):
     print(data)
     victim = None
-    for player in events.world.players.values():
-        if player.name.lower() == data:
-            victim = player
+    for victim_player in events.world.players.values():
+        if victim_player.name.lower() == data:
+            victim = victim_player
             player.combat(victim=victim)
             return
-    for npc in events.world.npcs.values():
+    for victim_npc in events.world.npcs.values():
         new_alias = []
-        for alias in npc.aliases:
+        for alias in victim_npc.aliases:
             new_alias.append(alias.lower())
-        if npc.name.lower() == data or data in new_alias:
-            victim = npc
+        if victim_npc.name.lower() == data or data in new_alias:
+            victim = victim_npc
             player.combat(victim=victim)
             return
     socketio.emit('event', {'message': f'Woah there killer! I\'m not sure who you\'re trying to attack, but "{data}" certainly isn\'t here. Maybe take out your aggression on a punching bag?'}, to=player.session_id)
