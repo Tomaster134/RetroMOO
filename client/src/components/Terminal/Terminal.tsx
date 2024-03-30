@@ -4,17 +4,24 @@ import Map from "../Map/Map";
 import Messages from "../Messages/Messages";
 import CommandList from "../CommandList/CommandList";
 import InventoryList from "../InventoryList/InventoryList";
+import React from "react";
 
 const Terminal = () => {
+
+  let apiURL
+
+  if (import.meta.env.MODE === 'development') {
+    apiURL = 'http://localhost:5000'
+  } else {
+    apiURL = 'https://retromooapi.onrender.com'
+  };
+
   let socketio = useRef(
-    io("https://retromooapi.onrender.com", {
+    io(apiURL, {
       auth: localStorage.user_id,
       autoConnect: false,
     })
   );
-//https://retromooapi.onrender.com
-//http://localhost:5000
-
 
   const [messages, setMessages] = useState([{ message: "", time: "" }]);
 
@@ -22,7 +29,9 @@ const Terminal = () => {
 
   const [message, setMessage] = useState("");
 
-  const [inventory, setInventory] = useState<{id: number, name: string, group: string}[]>([])
+  const [inventory, setInventory] = useState<
+    { id: number; name: string; group: string }[]
+  >([]);
 
   useEffect(() => {
     socketio.current.connect();
@@ -41,9 +50,12 @@ const Terminal = () => {
     socketio.current.on("map", (data: { map: string }) => {
       setMap(data.map);
     });
-    socketio.current.on("inventory", (data: { inventory: {id: number, name: string, group: string}[] }) => {
-      setInventory(data.inventory);
-    });
+    socketio.current.on(
+      "inventory",
+      (data: { inventory: { id: number; name: string; group: string }[] }) => {
+        setInventory(data.inventory);
+      }
+    );
   }, []);
 
   const submitTask = (event: React.FormEvent) => {
