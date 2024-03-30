@@ -58,7 +58,7 @@ export default function InventoryList(props: IInventory) {
         }}
       >
         {props.inventory.length ? (
-          <>
+          <div>
             {props.inventory.map((item) => (
               <Tooltip
                 key={item.id}
@@ -76,9 +76,9 @@ export default function InventoryList(props: IInventory) {
                 <MenuItem onClick={handleClose}>{item.name}</MenuItem>
               </Tooltip>
             ))}
-          </>
+          </div>
         ) : (
-          <>
+          <div>
             <Tooltip
               title="Go steal some stuff!"
               placement="right"
@@ -93,7 +93,7 @@ export default function InventoryList(props: IInventory) {
             >
               <MenuItem onClick={handleClose}>Empty Inventory :(</MenuItem>
             </Tooltip>
-          </>
+          </div>
         )}
       </Menu>
     </div>

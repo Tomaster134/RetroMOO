@@ -1,4 +1,4 @@
-from flask import session, request
+from flask import session, request, current_app
 from ... import socketio
 from flask_socketio import join_room, leave_room, emit
 from app.models import PlayerAccount, User
@@ -10,26 +10,27 @@ import dill
 client_list = [] #List of clients currently connected
 world = objects.World() #Instatiating world class to hold all rooms, players, and characters
 
-def world_timer():
+def world_timer(app):
      print('world timer triggered')
      socketio.sleep(10)
-     while True:
-            if client_list:
-                socketio.sleep(10)
-                for character in world.npcs.values():
-                     character.ambiance()
-                for room in world.rooms.values():
-                     room.ambiance()
-                    # for player in world.players.values():
-                    #     player_account = PlayerAccount.query.get(player.id)
-                    #     player_account.player_info = dill.dumps(player)
-                    #     player_account.save()
+     with app.app_context():
+        while True:
+                if client_list:
+                    socketio.sleep(10)
+                    for character in world.npcs.values():
+                        character.ambiance()
+                    for room in world.rooms.values():
+                        room.ambiance()
+                    for player in world.players.values():
+                        player_account = PlayerAccount.query.get(player.id)
+                        player_account.player_info = dill.dumps(player)
+                        player_account.save()
 
-                          
-            else:
-                 world.timer_active = False
-                 print('world timer deactivated')
-                 break
+                            
+                else:
+                    world.timer_active = False
+                    print('world timer deactivated')
+                    break
 
 
 #This is an event that occurs whenever a new connection is detected by the socketio server. Connection needs to properly connect the user with their Player object, update the Player object's session_id so private server emits can be transmitted to that player only
@@ -52,7 +53,7 @@ def connect(auth):
     world.players.update({player.id: player})
     if not world.timer_active:
         world.timer_active = True
-        socketio.start_background_task(world_timer)
+        socketio.start_background_task(world_timer, current_app._get_current_object())
     client_list.append(player.session_id)
     print(f'client list is {client_list}')
     print(f'players connected is {world.players}')

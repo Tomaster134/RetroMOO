@@ -12,8 +12,9 @@ import logging
 from flask_cors import CORS
 
 #Creates a server object that is used to wrap the app for websocket functionality
-socketio = SocketIO(cors_allowed_origins=['https://retromoo.onrender.com'], always_connect=True)
+socketio = SocketIO(cors_allowed_origins=['http://127.0.0.1:8080'], always_connect=True)
 #https://retromoo.onrender.com
+#http://127.0.0.1:8080
 
 
 #function that gets called when flask app is built
@@ -36,11 +37,9 @@ def create_app():
 
     #Importing blueprints
     from app.blueprints.main import main, events, commands, objects
-    from app.blueprints.auth import auth
     from app.blueprints.api import api, routes
 
     app.register_blueprint(main)
-    app.register_blueprint(auth)
     app.register_blueprint(api)
 
     #Adds current_user to global variables

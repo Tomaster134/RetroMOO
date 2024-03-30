@@ -7,12 +7,13 @@ import InventoryList from "../InventoryList/InventoryList";
 
 const Terminal = () => {
   let socketio = useRef(
-    io("https://retromooapi.onrender.com", {
+    io("http://localhost:5000", {
       auth: localStorage.user_id,
       autoConnect: false,
     })
   );
 //https://retromooapi.onrender.com
+//http://localhost:5000
 
 
   const [messages, setMessages] = useState([{ message: "", time: "" }]);

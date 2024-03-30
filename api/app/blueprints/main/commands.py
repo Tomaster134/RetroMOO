@@ -9,7 +9,6 @@ import app.blueprints.main.events as events
 
 @socketio.event
 def client(data):
-    print(data)
     current_player = events.world.players[session.get('player_id')]
     current_room = events.world.rooms[current_player.location]
     content = {

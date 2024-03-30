@@ -13,8 +13,8 @@ export default function NavBar() {
       <Avatar src={logoImg} sx={{ height: "32px", width: "32px", position: "absolute", zIndex: 1, margin: "8px"}} variant="square" component={Link} to="/"/>    
       <Tabs value={pathname} centered>
         <Tab label="Home" component={Link} to="/" value="/" />
-        <Tab label="Account" component={Link} to="/account" value="/account" />
         <Tab label="About" component={Link} to="/about" value="/about" />
+        <Tab label="Account" component={Link} to="/account" value="/account" />
         <Tab label="Create Player" component={Link} to="/create-player" value="/create-player" />
         <Tab label="Play Now!" component={Link} to="/play" value="/play" />
       </Tabs>
