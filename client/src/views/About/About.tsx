@@ -36,6 +36,8 @@ const About = () => {
             <div className="about-github">
               <Link
                 href="https://github.com/Tomaster134/RetroMOO"
+                target="_blank"
+                rel="noopener"
                 color="inherit"
               >
                 <GitHub sx={{ mx: "5px", position: "relative", top: "5px" }} />
@@ -47,11 +49,11 @@ const About = () => {
               Roadmap:
               <li>Add combat math</li>
               <li>Add equipment</li>
+              <li>Upgrade text parser</li>
               <li>Expand world and NPCs</li>
               <li>Make use of experience points and add quests</li>
               <li>Add player classes based on player stats</li>
               <li>Expand Map/Use Tileset</li>
-              <li>Upgrade Parser</li>
               <li>Be able to create objects in-game</li>
             </ul>
           </div>

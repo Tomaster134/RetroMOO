@@ -17,6 +17,14 @@ interface IAccounts {
 [];
 
 const Account = () => {
+  let apiURL:string
+
+  if (import.meta.env.MODE === 'development') {
+    apiURL = 'http://localhost:5000'
+  } else {
+    apiURL = 'https://retromooapi.onrender.com'
+  };
+
   const { user } = useContext(UserContext);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -25,7 +33,7 @@ const Account = () => {
 
   const accountPull = async (user_id: number) => {
     const response = await fetch(
-      `https://retromooapi.onrender.com/api/player_accounts?user_id=${user_id}`,
+      `${apiURL}/api/player_accounts?user_id=${user_id}`,
       {
         method: "GET",
         credentials: "include",
@@ -48,7 +56,7 @@ const Account = () => {
   const handleActivate = async (p_id: number) => {
     const input = { user_id: user.id, player_id: p_id };
     const response = await fetch(
-      "https://retromooapi.onrender.com/api/change_active",
+      `${apiURL}/api/change_active`,
       {
         method: "POST",
         credentials: "include",

@@ -9,6 +9,14 @@ import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 import "./CreatePlayer.css";
 
 const CreatePlayer = () => {
+  let apiURL:string
+
+  if (import.meta.env.MODE === 'development') {
+    apiURL = 'http://localhost:5000'
+  } else {
+    apiURL = 'https://retromooapi.onrender.com'
+  };
+
   const [playerName, setPlayerName] = useState("");
 
   const { user } = useContext(UserContext);
@@ -25,7 +33,7 @@ const CreatePlayer = () => {
       player_name: playerInfo.get("player-name"),
     };
     const response = await fetch(
-      "https://retromooapi.onrender.com/api/create",
+      `${apiURL}/api/create`,
       {
         method: "POST",
         credentials: "include",

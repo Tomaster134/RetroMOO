@@ -34,6 +34,14 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+  let apiURL:string
+
+  if (import.meta.env.MODE === 'development') {
+    apiURL = 'http://localhost:5000'
+  } else {
+    apiURL = 'https://retromooapi.onrender.com'
+  };
+
   const navigate = useNavigate();
 
   const [input, setInput] = React.useState({
@@ -52,7 +60,7 @@ export default function Login() {
       username: userInfo.get("username"),
       password: userInfo.get("password"),
     };
-    const response = await fetch("https://retromooapi.onrender.com/api/login", {
+    const response = await fetch(`${apiURL}/api/login`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

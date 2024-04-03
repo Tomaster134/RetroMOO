@@ -8,7 +8,7 @@ import React from "react";
 
 const Terminal = () => {
 
-  let apiURL
+  let apiURL:string
 
   if (import.meta.env.MODE === 'development') {
     apiURL = 'http://localhost:5000'

@@ -4,9 +4,9 @@ from ... import socketio
 from flask_socketio import join_room, leave_room, emit
 import app.blueprints.main.events as events
 
-#List of commands, needs to be revamped into class methods, with the socketio event calling a broad function depending on the information passed through from the client, and the function calling a class method. Unsure if i can cut out the middle man function
 
 
+#List of commands that are dependant on input from the client. Still unsure as to if I need the middle man function.
 @socketio.event
 def client(data):
     current_player = events.world.players[session.get('player_id')]

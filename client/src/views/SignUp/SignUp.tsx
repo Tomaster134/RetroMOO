@@ -32,6 +32,14 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  let apiURL:string
+
+  if (import.meta.env.MODE === 'development') {
+    apiURL = 'http://localhost:5000'
+  } else {
+    apiURL = 'https://retromooapi.onrender.com'
+  };
+
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
@@ -51,7 +59,7 @@ export default function SignUp() {
       password: userInfo.get("password"),
     };
     const response = await fetch(
-      "https://retromooapi.onrender.com/api/signup",
+      `${apiURL}/api/signup`,
       {
         method: "POST",
         credentials: "include",

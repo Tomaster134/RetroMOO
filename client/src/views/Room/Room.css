@@ -1,12 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap");
 
-body {
-  background-image: url(../../assets/imgs/forest.jpeg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .papyrus-box {
   background-image: url(../../assets/imgs/papyrus.png);
   background-size: contain;

@@ -10,11 +10,19 @@ import SignUp from "./views/SignUp/SignUp";
 import About from "./views/About/About";
 
 const App = () => {
+  let apiURL:string
+
+  if (import.meta.env.MODE === 'development') {
+    apiURL = 'http://localhost:5000'
+  } else {
+    apiURL = 'https://retromooapi.onrender.com'
+  };
+
   const { user, setUser } = useContext(UserContext);
   const userPull = async (user_id: number) => {
     const user = { user_id: user_id };
     const response = await fetch(
-      "https://retromooapi.onrender.com/api/user_pull",
+      `${apiURL}/api/user_pull`,
       {
         method: "POST",
         credentials: "include",
