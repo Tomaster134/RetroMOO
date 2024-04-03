@@ -81,6 +81,3 @@ def disconnect():
     player.disconnection()
     socketio.emit('event', {'message': f'{player.name} has left the server'})
     socketio.emit('event', {'message': f'{player.name} disappears, leaving slight wisps of smoke behind.'}, to=room)
-
-
-#This needs to revamped to essentially handle input and properly reroute input to the proper functions and methods
