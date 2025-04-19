@@ -132,7 +132,6 @@ def player_accounts_api():
     user_id: number,
     }
     '''
-    print(request.args)
     user_id = request.args['user_id']
     current_user = User.query.filter(User.id == user_id).first()
     accounts = current_user.accounts.all()

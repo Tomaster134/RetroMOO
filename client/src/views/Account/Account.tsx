@@ -17,13 +17,13 @@ interface IAccounts {
 [];
 
 const Account = () => {
-  let apiURL:string
+  let apiURL: string;
 
-  if (import.meta.env.MODE === 'development') {
-    apiURL = 'http://localhost:5000'
+  if (import.meta.env.MODE === "development") {
+    apiURL = "http://localhost:5000";
   } else {
-    apiURL = 'https://retromooapi.onrender.com'
-  };
+    apiURL = "https://retromooapi.onrender.com";
+  }
 
   const { user } = useContext(UserContext);
 
@@ -32,6 +32,10 @@ const Account = () => {
   const [accountList, setAccountList] = useState<IAccounts[]>([]);
 
   const accountPull = async (user_id: number) => {
+    // if user isn't logged in yet, prevents useless API call
+    if (user_id === -1) {
+      return null;
+    }
     const response = await fetch(
       `${apiURL}/api/player_accounts?user_id=${user_id}`,
       {
@@ -55,15 +59,12 @@ const Account = () => {
 
   const handleActivate = async (p_id: number) => {
     const input = { user_id: user.id, player_id: p_id };
-    const response = await fetch(
-      `${apiURL}/api/change_active`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(input),
-      }
-    );
+    const response = await fetch(`${apiURL}/api/change_active`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
     const data = await response.json();
     console.log(data);
     if (data.status === "ok") {
