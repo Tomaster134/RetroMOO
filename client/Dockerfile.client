@@ -1,10 +1,11 @@
-FROM node:latest
+#Using this version to prevent an error upon exiting. Unsure if I need to update & figure out why npm wants to scream at me
+FROM node:20.11.1-bullseye-slim
 
-WORKDIR /app
+WORKDIR /client
 
 COPY package*.json .
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
