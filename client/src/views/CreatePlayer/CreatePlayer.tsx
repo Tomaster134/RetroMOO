@@ -63,7 +63,7 @@ const CreatePlayer = () => {
       <h2 className="create-welcome">Create A Player</h2>
       <div className="create-box">
         <div className="create-box-interior">
-          <h4 className="create-box-title">Lorem Ipsum</h4>
+          <h4 className="create-box-title">Player Info</h4>
           <div className="create-divider"></div>
           <div className="create-blurb">
             <Box
@@ -80,6 +80,11 @@ const CreatePlayer = () => {
                 label="Player Name"
                 name="player-name"
                 value={playerName}
+                sx={{
+                  "& fieldset": { borderColor: 'whitesmoke' },
+                  "&:hover fieldset": {borderColor: 'gray!important'}
+                }}
+                placeholder="Please enter a player name"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setPlayerName(event.target.value);
                 }}

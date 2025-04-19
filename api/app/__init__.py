@@ -15,7 +15,7 @@ from flask_cors import CORS
 
 if Config.FLASK_MODE == 'dev':
     client_url = ['http://127.0.0.1:8080', 'http://localhost:8080']
-else:
+else: 
     client_url = 'https://retromoo.onrender.com'
 
 socketio = SocketIO(cors_allowed_origins=client_url, always_connect=True)
@@ -26,7 +26,7 @@ def create_app():
     logging.basicConfig(filename='record.log', level=logging.DEBUG) #Includes logging functionality
     app = Flask(__name__)
     
-    app.config.from_object(Config) #Loading in config file
+    app.config.from_object(Config) #Loading config file
 
     login_manager = LoginManager() 
     
@@ -43,6 +43,7 @@ def create_app():
     from app.blueprints.main import main, events, commands, objects
     from app.blueprints.api import api, routes
 
+    #Registering blueprints
     app.register_blueprint(main)
     app.register_blueprint(api)
 

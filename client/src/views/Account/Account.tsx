@@ -89,7 +89,7 @@ const Account = () => {
       <h2 className="account-welcome">Account</h2>
       <div className="account-box">
         <div className="account-box-interior">
-          <h4 className="account-box-title">Lorem Ipsum</h4>
+          <h4 className="account-box-title">Your Players</h4>
           <div className="account-divider"></div>
           <div className="account-blurb">
             {accountList.map((account) => (

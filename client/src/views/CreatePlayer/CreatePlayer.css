@@ -61,3 +61,11 @@
 #player-name {
   color: white;
 }
+
+/* .MuiOutlinedInput-notchedOutline {
+  border-color: whitesmoke;
+} */
+
+#player-name-label {
+  color: whitesmoke;
+}
